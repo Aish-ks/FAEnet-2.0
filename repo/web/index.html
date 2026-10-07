@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAENet Aspirin Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/3dmol@2.4.2/build/3Dmol-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #0b0e14; --panel: #121722; --panel2: #181f2d; --line: #243047;
+  --text: #e6ebf5; --muted: #8b97ad; --accent: #7c9cff; --pred: #ff9f43; --true: #39d0a0;
+  --bad: #ff6b81; --good: #39d0a0; --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: radial-gradient(1200px 600px at 10% -10%, #1a2240 0%, var(--bg) 55%); background-color: var(--bg);
+  color: var(--text); font: 14px/1.5 Inter, system-ui, sans-serif; min-height: 100vh; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; padding: 20px 28px; border-bottom: 1px solid var(--line); }
+h1 { font-size: 20px; margin: 0; letter-spacing: -0.01em; }
+h1 span { color: var(--accent); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
+.chip { font: 12px var(--mono); padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--panel); }
+.chip b { color: var(--text); font-weight: 600; }
+main { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 20px; padding: 20px 28px 40px; max-width: 1500px; margin: 0 auto; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.card h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 12px; font-weight: 600; }
+#viewer-wrap { position: relative; height: 560px; padding: 0; overflow: hidden; }
+#viewer { position: absolute; inset: 0; }
+.legend { position: absolute; left: 14px; top: 12px; display: flex; gap: 14px; font-size: 12px; color: var(--muted); z-index: 2; pointer-events: none; }
+.legend i { display: inline-block; width: 18px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+#status { position: absolute; right: 14px; bottom: 12px; font: 12px var(--mono); color: var(--muted); z-index: 2; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+button { font: 600 13px Inter, sans-serif; color: var(--text); background: var(--panel2); border: 1px solid var(--line); border-radius: 10px;
+  padding: 9px 14px; cursor: pointer; transition: border-color .15s, transform .05s; }
+button:hover { border-color: var(--accent); }
+button:active { transform: translateY(1px); }
+button.primary { background: var(--accent); color: #0b0e14; border-color: var(--accent); }
+button:disabled { opacity: .5; cursor: wait; }
+label.tog { display: inline-flex; gap: 6px; align-items: center; color: var(--muted); font-size: 13px; cursor: pointer; }
+input[type=range] { accent-color: var(--accent); width: 110px; }
+.side { display: flex; flex-direction: column; gap: 16px; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stat { background: var(--panel2); border-radius: 10px; padding: 10px 12px; }
+.stat .k { font-size: 11px; color: var(--muted); }
+.stat .v { font: 600 18px var(--mono); margin-top: 2px; }
+.stat .u { font-size: 11px; color: var(--muted); font-weight: 400; }
+.stat.wide { grid-column: span 2; }
+.check { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--panel2); font-size: 13px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.ok { background: var(--good); box-shadow: 0 0 10px var(--good); }
+.dot.bad { background: var(--bad); }
+.row2 { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.chart-box { position: relative; height: 260px; }
+table { width: 100%; border-collapse: collapse; font: 12px var(--mono); }
+th, td { text-align: right; padding: 7px 8px; border-bottom: 1px solid var(--line); }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--muted); font-weight: 600; }
+tr.best td { color: var(--true); }
+p.note { color: var(--muted); font-size: 12px; margin: 10px 0 0; }
+button.live { border-color: var(--pred); }
+button.live.on { background: var(--pred); color: #0b0e14; }
+#viewer-wrap.grab { cursor: grab; }
+#viewer-wrap.grabbing { cursor: grabbing; }
+.meter { height: 10px; border-radius: 999px; background: var(--panel2); overflow: hidden; margin: 8px 0 6px; }
+.meter > div { height: 100%; width: 0; border-radius: 999px; transition: width .15s, background .15s; }
+.meter-row { display: flex; justify-content: space-between; font: 12px var(--mono); color: var(--muted); }
+#live-hint { color: var(--muted); font-size: 12px; display: none; }
+@media (max-width: 1000px) {
+  main { grid-template-columns: 1fr; padding: 16px; }
+  .row2 { grid-template-columns: 1fr; }
+  #viewer-wrap { height: 420px; }
+  header { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>FAENet <span>·</span> Aspirin Lab</h1>
+  <div class="chips" id="chips"></div>
+</header>
+
+<main>
+  <section>
+    <div class="card" id="viewer-wrap">
+      <div class="legend">
+        <span><i style="background:var(--pred)"></i>predicted force</span>
+        <span><i style="background:var(--true)"></i>DFT force</span>
+      </div>
+      <div id="viewer"></div>
+      <div id="status">loading…</div>
+    </div>
+    <div class="controls">
+      <button class="primary" id="b-sample">New conformation</button>
+      <button id="b-rotate">Random rotation + reflection</button>
+      <button id="b-jiggle">Jiggle atoms</button>
+      <button id="b-md">Run molecular dynamics</button>
+      <button class="live" id="b-live">Grab &amp; pull (live)</button>
+      <label class="tog">T <input type="range" id="temp" min="50" max="500" step="50" value="300" title="MD17 aspirin was sampled at 500 K; hotter is outside the training data"> <span id="temp-v">300 K</span></label>
+      <label class="tog"><input type="checkbox" id="t-pred" checked> predicted</label>
+      <label class="tog"><input type="checkbox" id="t-true" checked> DFT</label>
+      <label class="tog">arrow scale <input type="range" id="scale" min="0.005" max="0.06" step="0.005" value="0.02"></label>
+    </div>
+    <p id="live-hint">Live: drag any atom to pull it, drag empty space to rotate. The thermostat holds the temperature at T.</p>
+  </section>
+
+  <aside class="side">
+    <div class="card">
+      <h2>Prediction</h2>
+      <div class="stats">
+        <div class="stat wide"><div class="k">Predicted energy</div><div class="v" id="s-E">–</div></div>
+        <div class="stat"><div class="k">DFT energy</div><div class="v" id="s-Et">–</div></div>
+        <div class="stat"><div class="k">Energy error</div><div class="v" id="s-dE">–</div></div>
+        <div class="stat"><div class="k">Force MAE (this mol.)</div><div class="v" id="s-F">–</div></div>
+        <div class="stat"><div class="k">Inference latency</div><div class="v" id="s-ms">–</div></div>
+      </div>
+      <p class="note" id="s-src"></p>
+    </div>
+    <div class="card">
+      <h2>Model confidence</h2>
+      <div class="meter"><div id="m-bar"></div></div>
+      <div class="meter-row"><span id="m-val">–</span><span id="m-lab">–</span></div>
+      <p class="note" id="m-note">How much two independently trained models disagree on the forces. High disagreement means unfamiliar geometry, where the model is guessing and bonds may soon break.</p>
+    </div>
+    <div class="card">
+      <h2>Symmetry check</h2>
+      <div class="check"><span class="dot" id="c-dot"></span><span id="c-txt">Press <b>Random rotation</b> to test E(3) invariance live.</span></div>
+      <p class="note">Same molecule, randomly rotated, reflected and shifted. The energy must stay the same and the forces must turn with the molecule. FAENet gets this from frame averaging, without a special equivariant architecture.</p>
+    </div>
+    <div class="card">
+      <h2>Frames at inference (same weights)</h2>
+      <table id="frames"><thead><tr><th>frame</th><th>E MAE</th><th>F MAE</th><th>|ΔE| rot</th></tr></thead><tbody></tbody></table>
+      <p class="note">kcal/mol and kcal/mol/Å on 1000 held-out aspirin conformations.</p>
+    </div>
+  </aside>
+
+  <div class="row2">
+    <div class="card">
+      <h2>Training: validation force MAE</h2>
+      <div class="chart-box"><canvas id="c-train"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Molecular dynamics: energy over time</h2>
+      <div class="chart-box"><canvas id="c-md"></canvas></div>
+      <p class="note" id="md-note">Run MD to see whether the learned forces conserve total energy.</p>
+    </div>
+  </div>
+</main>
+
+<script>
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const $ = id => document.getElementById(id);
+const fmt = (x, d = 2) => x.toLocaleString(undefined, { minimumFractionDigits: d, maximumFractionDigits: d });
+let state = null, playing = false, live = false, grab = null, calib = { u50: 1, u99: 2 };
+
+const viewer = $3Dmol.createViewer($("viewer"), { backgroundColor: css("--panel"), antialias: true });
+Chart.defaults.color = css("--muted");
+Chart.defaults.borderColor = css("--line");
+Chart.defaults.font.family = "Inter";
+
+async function api(path, body) {
+  const r = await fetch(path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
+  const j = await r.json();
+  if (j.error) throw new Error(j.error);
+  return j;
+}
+
+function xyz(symbols, pos) {
+  return `${symbols.length}\n\n` + symbols.map((s, i) => `${s} ${pos[i].join(" ")}`).join("\n");
+}
+
+function draw(symbols, pos, F, Ft, zoom) {
+  viewer.removeAllModels(); viewer.removeAllShapes();
+  viewer.addModel(xyz(symbols, pos), "xyz");
+  viewer.setStyle({}, { stick: { radius: 0.13, colorscheme: "Jmol" }, sphere: { scale: 0.24, colorscheme: "Jmol" } });
+  const k = +$("scale").value;
+  const arrows = (FF, color) => FF && FF.forEach((f, i) => {
+    const p = pos[i];
+    viewer.addArrow({ start: { x: p[0], y: p[1], z: p[2] }, end: { x: p[0] + k * f[0], y: p[1] + k * f[1], z: p[2] + k * f[2] },
+      radius: 0.045, radiusRatio: 2.2, mid: 0.78, color });
+  });
+  if ($("t-pred").checked) arrows(F, css("--pred"));
+  if ($("t-true").checked) arrows(Ft, css("--true"));
+  if (zoom) viewer.zoomTo();
+  viewer.render();
+}
+
+function setMeter(u) {
+  const bad = u > 1.5 * calib.u99, warn = u > calib.u99;
+  const col = bad ? css("--bad") : warn ? css("--pred") : css("--good");
+  $("m-bar").style.width = Math.min(100, 100 * u / (2 * calib.u99)) + "%";
+  $("m-bar").style.background = col;
+  $("m-val").textContent = `${fmt(u)} kcal/mol/Å`;
+  $("m-lab").innerHTML = `<span style="color:${col}">${bad ? "unfamiliar: expect trouble" : warn ? "unusual" : "normal"}</span>`;
+}
+
+function redraw(zoom) { if (state) draw(state.symbols, state.pos, state.F, state.F_true, zoom); }
+
+function show(s, src) {
+  state = s;
+  redraw(true);
+  $("s-E").innerHTML = `${fmt(s.E)} <span class="u">kcal/mol</span>`;
+  $("s-Et").textContent = s.E_true != null ? fmt(s.E_true) : "–";
+  if (s.E_true != null) {
+    const d = s.E - s.E_true;
+    $("s-dE").innerHTML = `<span style="color:${Math.abs(d) < 1 ? css("--good") : css("--pred")}">${d >= 0 ? "+" : ""}${fmt(d)}</span>`;
+  } else $("s-dE").textContent = "–";
+  $("s-F").innerHTML = s.F_mae != null ? `${fmt(s.F_mae)} <span class="u">kcal/mol/Å</span>` : "–";
+  $("s-ms").innerHTML = `${fmt(s.ms, 1)} <span class="u">ms</span>`;
+  $("s-src").textContent = src;
+  $("status").textContent = `${s.symbols.length} atoms · ${fmt(s.ms, 1)} ms`;
+}
+
+async function busy(fn) {
+  live = false;
+  document.querySelectorAll("button").forEach(b => b.disabled = true);
+  try { await fn(); } catch (e) { $("status").textContent = "error: " + e.message; }
+  document.querySelectorAll("button").forEach(b => b.disabled = false);
+}
+
+$("b-sample").onclick = () => busy(async () => {
+  playing = false;
+  const s = await api("/api/sample");
+  show(s, `MD17 frame #${s.idx}, not seen during training.`);
+  $("c-dot").className = "dot"; $("c-txt").innerHTML = "Press <b>Random rotation</b> to test E(3) invariance live.";
+});
+
+$("b-rotate").onclick = () => busy(async () => {
+  if (!state) return;
+  const s = await api("/api/rotate", { pos: state.pos, F_true: state.F_true, E_true: state.E_true });
+  s.F_mae = state.F_mae;
+  show(s, "Same molecule after a random orthogonal transform (det = −1, so it includes a reflection) plus a shift.");
+  const ok = s.dE < 1e-2 && s.dF < 1e-2;
+  $("c-dot").className = "dot " + (ok ? "ok" : "bad");
+  $("c-txt").innerHTML = `|ΔE| = <b>${s.dE.toExponential(1)}</b> kcal/mol · max |ΔF| = <b>${s.dF.toExponential(1)}</b> ${ok ? "(invariant)" : ""}`;
+});
+
+$("b-jiggle").onclick = () => busy(async () => {
+  if (!state) return;
+  const s = await api("/api/jiggle", { pos: state.pos, amount: 0.05 });
+  show(s, "Atoms displaced by ~0.05 Å Gaussian noise. No DFT reference for this geometry.");
+});
+
+let mdChart;
+$("b-md").onclick = () => busy(async () => {
+  if (!state) return;
+  $("status").textContent = "simulating…";
+  const T = +$("temp").value;
+  let r;
+  try { r = await api("/api/md", { pos: state.pos, steps: 600, dt: 0.5, T }); }
+  catch (e) {  // leftover broken molecule: load a fresh one instead of leaving the user stuck
+    if (!/broken bond/.test(e.message)) throw e;
+    const s = await api("/api/sample");
+    show(s, `MD17 frame #${s.idx}. The previous structure had broken bonds, so it was replaced.`);
+    $("md-note").textContent = "The previous molecule had broken bonds, so a fresh one was loaded. Press Run again.";
+    return;
+  }
+  if (!r.frames.length) { $("md-note").textContent = "The model left its training range on the very first step. Try a lower temperature."; return; }
+  const E0 = r.energies[0][1] + r.energies[0][2];
+  const t = r.energies.map(e => e[0]);
+  const pot = r.energies.map(e => e[1] - E0), kin = r.energies.map(e => e[2]), tot = r.energies.map(e => e[1] + e[2] - E0);
+  const unc = r.energies.map(e => e[3]);
+  mdChart?.destroy();
+  mdChart = new Chart($("c-md"), {
+    type: "line",
+    data: { labels: t, datasets: [
+      { label: "total (E − E₀)", data: tot, borderColor: css("--accent"), borderWidth: 2, pointRadius: 0 },
+      { label: "potential (E − E₀)", data: pot, borderColor: css("--pred"), borderWidth: 1.5, pointRadius: 0 },
+      { label: "kinetic", data: kin, borderColor: css("--true"), borderWidth: 1.5, pointRadius: 0 },
+      { label: "model disagreement →", data: unc, borderColor: css("--bad"), borderWidth: 1.5, borderDash: [4, 3], pointRadius: 0, yAxisID: "y2" },
+    ] },
+    options: { animation: false, maintainAspectRatio: false, interaction: { mode: "index", intersect: false },
+      scales: { x: { title: { display: true, text: "time (fs)" }, ticks: { maxTicksLimit: 8 } }, y: { title: { display: true, text: "kcal/mol" } },
+                y2: { position: "right", grid: { display: false }, title: { display: true, text: "disagreement (kcal/mol/Å)" } } } },
+  });
+  const drift = Math.max(...tot) - Math.min(...tot);
+  $("md-note").innerHTML = `${r.steps} steps × ${r.dt} fs at ${T} K, NVE velocity Verlet. Total-energy spread ${fmt(drift)} kcal/mol. ${fmt(r.ms_per_step, 1)} ms per force call.` +
+    (r.broke_at != null ? ` <b style="color:${css("--bad")}">Stopped at ${fmt(r.broke_at, 0)} fs: a bond broke, so the model is outside its training data. Press New conformation to reset.</b>` : "");
+  playing = true;
+  for (let i = 0; i < r.frames.length && playing; i++) {
+    draw(r.symbols, r.frames[i], null, null, false);
+    setMeter(r.energies[i][3]);
+    $("status").textContent = `t = ${fmt(r.energies[i][0], 0)} fs`;
+    await new Promise(res => setTimeout(res, 30));
+  }
+  if (playing && r.frames.length) { state = { ...state, pos: r.frames.at(-1), F: null, F_true: null, E_true: null, F_mae: null }; }
+  playing = false;
+});
+
+function drawLive() {
+  draw(state.symbols, state.pos, null, null, false);
+  if (grab) {
+    const a = state.pos[grab.i], t = grab.target, P = q => ({ x: q[0], y: q[1], z: q[2] });
+    viewer.addCylinder({ start: P(a), end: P(t), radius: 0.035, color: "#ffd166", dashed: true, fromCap: 1, toCap: 1 });
+    viewer.addSphere({ center: P(t), radius: 0.12, color: "#ffd166" });
+    viewer.render();
+  }
+}
+
+$("b-live").onclick = async () => {
+  if (live) { live = false; return; }
+  if (!state) return;
+  live = true; playing = false;
+  $("b-live").classList.add("on"); $("b-live").textContent = "Stop live";
+  $("live-hint").style.display = "block"; $("viewer-wrap").classList.add("grab");
+  state = { ...state, F: null, F_true: null, E_true: null, F_mae: null };
+  let v = null;
+  while (live) {
+    let r;
+    try {
+      r = await api("/api/step", { pos: state.pos, v, T: +$("temp").value, steps: 8,
+        pull: grab ? { i: grab.i, target: grab.target } : null });
+    } catch (e) {
+      if (!/broken bond/.test(e.message)) { $("status").textContent = "error: " + e.message; break; }
+      const s = await api("/api/sample"); show(s, `MD17 frame #${s.idx}. The previous structure had broken bonds.`);
+      state = { ...state, F: null, F_true: null }; v = null; continue;
+    }
+    state.pos = r.pos; v = r.broken ? null : r.v;  // a refused step re-draws velocities so it does not retry the same move
+    drawLive(); setMeter(r.u);
+    $("status").textContent = r.broken ? "pulled too hard: that step would break a bond, so it was refused"
+      : `live · ${fmt(r.T, 0)} K · ${fmt(r.ms / 8, 1)} ms/step`;
+  }
+  live = false; grab = null;
+  $("b-live").classList.remove("on"); $("b-live").textContent = "Grab & pull (live)";
+  $("live-hint").style.display = "none"; $("viewer-wrap").classList.remove("grab", "grabbing");
+  redraw(false);
+};
+
+// capture phase on the wrapper: a press near an atom becomes a grab (3Dmol never sees it); elsewhere 3Dmol rotates
+$("viewer-wrap").addEventListener("mousedown", e => {
+  if (!live || !state) return;
+  const scr = viewer.modelToScreen(state.pos.map(p => ({ x: p[0], y: p[1], z: p[2] })));
+  let best = -1, bd = 30;
+  scr.forEach((s, i) => { const d = Math.hypot(s.x - e.pageX, s.y - e.pageY); if (d < bd) { bd = d; best = i; } });
+  if (best < 0) return;
+  e.stopPropagation(); e.preventDefault();
+  const p = state.pos[best], s0 = scr[best];
+  // screen Jacobian of the atom position: column k = screen motion per +1 A along model axis k
+  const J = [0, 1, 2].map(k => { const q = viewer.modelToScreen({ x: p[0] + (k === 0), y: p[1] + (k === 1), z: p[2] + (k === 2) });
+    return [q.x - s0.x, q.y - s0.y]; });
+  grab = { i: best, p0: [...p], m0: [e.pageX, e.pageY], J, target: [...p] };
+  $("viewer-wrap").classList.add("grabbing");
+}, true);
+
+window.addEventListener("mousemove", e => {
+  if (!grab) return;
+  // least-norm model displacement that moves the atom by the mouse delta on screen: J^T (J J^T)^-1 d
+  const d = [e.pageX - grab.m0[0], e.pageY - grab.m0[1]], J = grab.J;
+  const a = J.reduce((s, c) => s + c[0] * c[0], 0), b = J.reduce((s, c) => s + c[0] * c[1], 0), c2 = J.reduce((s, c) => s + c[1] * c[1], 0);
+  const det = a * c2 - b * b || 1e-9;
+  const sol = [(c2 * d[0] - b * d[1]) / det, (a * d[1] - b * d[0]) / det];
+  grab.target = grab.p0.map((x, k) => x + J[k][0] * sol[0] + J[k][1] * sol[1]);
+});
+window.addEventListener("mouseup", () => { if (grab) { grab = null; $("viewer-wrap").classList.remove("grabbing"); } });
+
+["t-pred", "t-true", "scale"].forEach(id => $(id).oninput = () => { if (!live) redraw(false); });
+$("temp").oninput = () => $("temp-v").textContent = $("temp").value + " K";
+
+(async () => {
+  const r = await api("/api/runs");
+  const m = r.model;
+  calib = { u50: m.u50, u99: m.u99 };
+  $("m-note").textContent = `How much ${m.name} and an independently trained model (${m.partner}) disagree on the forces. ` +
+    `On unseen MD17 frames it is typically ${fmt(m.u50)}, and 99% of frames stay under ${fmt(m.u99)}. Higher means unfamiliar geometry, where bonds may soon break.`;
+  $("chips").innerHTML = [
+    ["frame", m.frame], ["forces", m.forces === "grad" ? "−∇E" : m.forces], ["params", (m.params / 1e3).toFixed(0) + "k"],
+    ["val F MAE", m.val_F.toFixed(2)], ["val E MAE", m.val_E.toFixed(2)], ["device", m.gpu],
+  ].map(([k, v]) => `<span class="chip">${k} <b>${v}</b></span>`).join("");
+
+  const palette = [css("--accent"), css("--pred"), css("--true"), css("--bad")];
+  const runs = Object.entries(r).filter(([k]) => k !== "model");
+  new Chart($("c-train"), {
+    type: "line",
+    data: { datasets: runs.map(([name, v], i) => ({ label: name, data: v.curve.map(c => ({ x: c[0], y: c[2] })),
+      borderColor: palette[i % 4], borderWidth: 2, pointRadius: 0, tension: .25 })) },
+    options: { animation: false, maintainAspectRatio: false, parsing: false,
+      scales: { x: { type: "linear", title: { display: true, text: "epoch" } },
+                y: { type: "logarithmic", title: { display: true, text: "force MAE (kcal/mol/Å)" } } } },
+  });
+
+  const best = runs.find(([k]) => k === m.name) || runs.at(-1);
+  const rows = best[1].frames;
+  const minF = Math.min(...rows.map(f => f[2]));
+  $("frames").querySelector("tbody").innerHTML = rows.map(f =>
+    `<tr class="${f[2] === minF ? "best" : ""}"><td>${f[0]}</td><td>${f[1].toFixed(3)}</td><td>${f[2].toFixed(3)}</td><td>${f[3].toExponential(1)}</td></tr>`).join("");
+  $("b-sample").click();
+})().catch(e => $("status").textContent = "error: " + e.message);
+</script>
+</body>
+</html>
