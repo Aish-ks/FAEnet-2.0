@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.claude/
+data/
+handoff/
+*.pdf
+# checkpoints are large; only the demo models are committed
+runs/*.pt
+!runs/aspirin_canon_grad_50k.pt
+!runs/al_random.pt
+!runs/aspirin_canon_grad.pt

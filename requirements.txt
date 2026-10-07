@@ -1,0 +1,6 @@
+torch>=2.5
+numpy
+# official FAENet baseline (baseline/): install faenet with --no-deps, see README
+torch_geometric
+mendeleev
+pandas
