@@ -5,7 +5,7 @@ A re-implementation of FAENet (Duval et al., ICML 2023, [arXiv:2305.05577](https
 - forces computed as −∇E;
 - a smooth cutoff.
 
-It is compared head-to-head against the authors' official implementation on the same data. Results and method are in **[WRITEUP.md](WRITEUP.md)**.
+It is compared head-to-head against the authors' official implementation on the same data. Results and method are in **PDF**.
 
 ## Setup
 
