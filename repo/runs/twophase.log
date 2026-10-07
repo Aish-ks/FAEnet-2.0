@@ -1,0 +1,16 @@
+initialised from runs/twophase_direct.pt (skipped ['force.0.weight', 'force.0.bias', 'force.2.weight', 'force.2.bias', 'force.4.weight', 'force.4.bias'], new [])
+device: cuda
+baseline (predict mean) energy MAE: 4.723
+epoch   5  loss 3.819  val E MAE 1.005  F MAE 1.938  (6.2s/epoch)
+epoch  10  loss 2.194  val E MAE 0.615  F MAE 1.513  (6.2s/epoch)
+epoch  15  loss 1.827  val E MAE 0.514  F MAE 1.356  (6.6s/epoch)
+epoch  20  loss 1.710  val E MAE 0.568  F MAE 1.243  (6.3s/epoch)
+epoch  25  loss 2.043  val E MAE 0.415  F MAE 1.164  (6.2s/epoch)
+epoch  30  loss 1.546  val E MAE 0.410  F MAE 1.147  (6.2s/epoch)
+
+same weights, different inference frames (E MAE, F MAE, |dE| under random E(3) move):
+  none   39.883  13.678  5.8e+01
+  sfa    12.572  8.298  3.8e+01
+  canon  0.410  1.147  9.6e-05
+  soft   0.458  1.195  1.9e-04
+  full   12.779  6.038  1.9e-04

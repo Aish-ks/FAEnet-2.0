@@ -1,0 +1,4 @@
+model                                      T   broken  mean t-break  |dEtot| med  flips  kick med
+al_random.pt [canon]                     500  12/16       11.13 ps     12.69      81.2     0.307   (236s)
+aspirin_canon_grad_50k.pt [canon]        500   5/16       18.36 ps      4.79     123.5     0.221   (272s)
+aspirin_soft_50k.pt [soft]               500   4/16       17.96 ps      4.69     145.8     0.017   (611s)

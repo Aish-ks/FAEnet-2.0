@@ -1,0 +1,11 @@
+initialised from runs/aspirin_canon_grad_50k.pt
+device: cuda
+baseline (predict mean) energy MAE: 4.734
+epoch   3  loss 0.776  val E MAE 0.299  F MAE 0.440  (475.9s/epoch)
+
+same weights, different inference frames (E MAE, F MAE, |dE| under random E(3) move):
+  none   3.270  2.618  1.3e+01
+  sfa    2.559  1.338  8.6e+00
+  canon  0.297  0.440  1.8e-04
+  soft   0.299  0.440  2.1e-04
+  full   2.544  1.086  3.0e-04

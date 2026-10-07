@@ -1,0 +1,5 @@
+official FAENet: 5.78M params, 500 steps/epoch, warmup 2500 steps
+epoch   5  loss 253.346  val E MAE 3.400  F MAE 4.542  lr 2.0e-04  (179.6s/epoch)
+epoch  10  loss 155.547  val E MAE 1.980  F MAE 2.364  lr 2.0e-04  (180.6s/epoch)
+epoch  15  loss 130.082  val E MAE 1.573  F MAE 1.733  lr 2.0e-04  (180.1s/epoch)
+epoch  20  loss 112.402  val E MAE 1.790  F MAE 1.453  lr 2.0e-04  (178.6s/epoch)

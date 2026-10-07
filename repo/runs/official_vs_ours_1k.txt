@@ -1,0 +1,12 @@
+== [16:14] 1k: test set (2000 never-used frames) ==
+runs/official_1k.pt                      test E MAE 2.267  F MAE 2.413
+runs/official_1k.pt:full                 test E MAE 2.328  F MAE 2.823
+runs/aspirin_canon_grad.pt               test E MAE 0.619  F MAE 1.701
+== [16:16] 1k: MD stability (16 replicas x 3 ps) ==
+model                                      T   broken  mean t-break  |dEtot| med  flips  kick med
+official_1k.pt [sfa]                     300  16/16        0.44 ps     47.78       2.1     1.293   (61s)
+official_1k.pt [sfa]                     500  16/16        0.37 ps     31.68       2.2     1.497   (56s)
+official_1k.pt [full]                    300  16/16        0.39 ps     39.13       2.8     0.381   (358s)
+official_1k.pt [full]                    500  16/16        0.33 ps     51.32       2.8     0.496   (461s)
+aspirin_canon_grad.pt [canon]            300   9/16        1.78 ps      7.70       5.4     0.603   (42s)
+aspirin_canon_grad.pt [canon]            500  15/16        1.26 ps      6.08      11.4     0.480   (42s)

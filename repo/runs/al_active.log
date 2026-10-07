@@ -1,0 +1,90 @@
+device: cuda
+baseline (predict mean) energy MAE: 4.895
+epoch   5  loss 11.208  val E MAE 5.258  F MAE 6.609  (13.2s/epoch)
+epoch  10  loss 6.604  val E MAE 4.159  F MAE 3.544  (13.2s/epoch)
+epoch  15  loss 5.852  val E MAE 6.124  F MAE 2.969  (13.1s/epoch)
+epoch  20  loss 5.656  val E MAE 2.089  F MAE 2.530  (13.3s/epoch)
+epoch  25  loss 4.593  val E MAE 7.866  F MAE 2.405  (13.2s/epoch)
+epoch  30  loss 4.738  val E MAE 5.234  F MAE 2.365  (21.5s/epoch)
+epoch  35  loss 6.772  val E MAE 16.090  F MAE 2.327  (41.3s/epoch)
+epoch  40  loss 3.880  val E MAE 2.692  F MAE 1.886  (21.4s/epoch)
+epoch  45  loss 3.215  val E MAE 5.798  F MAE 1.886  (21.5s/epoch)
+epoch  50  loss 5.095  val E MAE 6.745  F MAE 2.212  (44.2s/epoch)
+epoch  55  loss 4.784  val E MAE 17.474  F MAE 1.777  (21.4s/epoch)
+epoch  60  loss 3.236  val E MAE 3.975  F MAE 1.687  (21.5s/epoch)
+epoch  65  loss 4.640  val E MAE 2.567  F MAE 2.230  (21.4s/epoch)
+epoch  70  loss 2.345  val E MAE 1.341  F MAE 1.658  (21.6s/epoch)
+epoch  75  loss 4.744  val E MAE 21.752  F MAE 1.877  (21.5s/epoch)
+epoch  80  loss 3.677  val E MAE 4.399  F MAE 1.643  (21.5s/epoch)
+epoch  85  loss 3.827  val E MAE 2.660  F MAE 1.806  (21.5s/epoch)
+epoch  90  loss 3.390  val E MAE 5.740  F MAE 1.469  (21.5s/epoch)
+epoch  95  loss 2.937  val E MAE 5.095  F MAE 1.380  (21.6s/epoch)
+epoch 100  loss 2.688  val E MAE 2.047  F MAE 1.414  (13.3s/epoch)
+epoch 105  loss 3.172  val E MAE 5.765  F MAE 1.581  (13.3s/epoch)
+epoch 110  loss 2.906  val E MAE 2.003  F MAE 1.518  (13.3s/epoch)
+epoch 115  loss 2.303  val E MAE 0.916  F MAE 1.525  (13.2s/epoch)
+epoch 120  loss 2.007  val E MAE 0.803  F MAE 1.368  (13.2s/epoch)
+epoch 125  loss 2.206  val E MAE 1.263  F MAE 1.229  (13.2s/epoch)
+epoch 130  loss 3.306  val E MAE 4.362  F MAE 1.593  (13.3s/epoch)
+epoch 135  loss 1.882  val E MAE 2.210  F MAE 1.415  (13.3s/epoch)
+epoch 140  loss 1.812  val E MAE 1.977  F MAE 1.184  (13.2s/epoch)
+epoch 145  loss 2.648  val E MAE 0.710  F MAE 1.334  (13.3s/epoch)
+epoch 150  loss 2.870  val E MAE 9.113  F MAE 1.209  (13.3s/epoch)
+epoch 155  loss 1.614  val E MAE 0.860  F MAE 1.149  (13.2s/epoch)
+epoch 160  loss 2.005  val E MAE 1.815  F MAE 1.101  (13.3s/epoch)
+epoch 165  loss 1.729  val E MAE 1.527  F MAE 1.110  (13.3s/epoch)
+epoch 170  loss 1.586  val E MAE 1.327  F MAE 1.069  (13.3s/epoch)
+epoch 175  loss 1.727  val E MAE 0.869  F MAE 1.116  (13.2s/epoch)
+epoch 180  loss 1.796  val E MAE 3.522  F MAE 1.107  (13.2s/epoch)
+epoch 185  loss 1.637  val E MAE 1.133  F MAE 1.177  (13.3s/epoch)
+epoch 190  loss 1.338  val E MAE 0.600  F MAE 1.060  (13.2s/epoch)
+epoch 195  loss 1.371  val E MAE 2.561  F MAE 1.038  (13.2s/epoch)
+epoch 200  loss 1.485  val E MAE 1.798  F MAE 1.002  (13.2s/epoch)
+epoch 205  loss 1.578  val E MAE 1.344  F MAE 1.073  (13.2s/epoch)
+epoch 210  loss 1.362  val E MAE 0.664  F MAE 0.984  (13.2s/epoch)
+epoch 215  loss 1.476  val E MAE 1.805  F MAE 0.982  (13.3s/epoch)
+epoch 220  loss 1.641  val E MAE 1.275  F MAE 0.973  (13.2s/epoch)
+epoch 225  loss 1.279  val E MAE 0.554  F MAE 0.960  (13.3s/epoch)
+epoch 230  loss 1.328  val E MAE 0.898  F MAE 0.954  (32.0s/epoch)
+epoch 235  loss 1.261  val E MAE 0.910  F MAE 0.946  (13.2s/epoch)
+epoch 240  loss 1.059  val E MAE 1.038  F MAE 0.935  (13.2s/epoch)
+epoch 245  loss 1.121  val E MAE 1.096  F MAE 0.944  (13.3s/epoch)
+epoch 250  loss 1.145  val E MAE 1.192  F MAE 0.934  (13.2s/epoch)
+epoch 255  loss 1.431  val E MAE 0.495  F MAE 0.934  (13.2s/epoch)
+epoch 260  loss 1.198  val E MAE 0.460  F MAE 0.927  (13.2s/epoch)
+epoch 265  loss 1.019  val E MAE 0.536  F MAE 0.926  (13.2s/epoch)
+epoch 270  loss 1.098  val E MAE 0.451  F MAE 0.923  (13.2s/epoch)
+epoch 275  loss 1.097  val E MAE 0.424  F MAE 0.920  (13.2s/epoch)
+epoch 280  loss 0.900  val E MAE 0.410  F MAE 0.915  (13.3s/epoch)
+epoch 285  loss 0.903  val E MAE 0.416  F MAE 0.914  (13.2s/epoch)
+epoch 290  loss 1.031  val E MAE 0.401  F MAE 0.913  (13.2s/epoch)
+epoch 295  loss 1.256  val E MAE 0.399  F MAE 0.913  (62.3s/epoch)
+epoch 300  loss 1.065  val E MAE 0.398  F MAE 0.913  (13.0s/epoch)
+
+same weights, different inference frames (E MAE, F MAE, |dE| under random E(3) move):
+  none   3.312  4.161  1.0e+01
+  sfa    1.798  2.780  9.6e+00
+  canon  0.398  0.913  2.3e-04
+  soft   0.403  0.921  2.4e-04
+Traceback (most recent call last):
+  File "/home/babunambothiri/Documents/AI Project/train_lj.py", line 149, in <module>
+    main()
+    ~~~~^^
+  File "/home/babunambothiri/Documents/AI Project/train_lj.py", line 140, in main
+    eE, eF = evaluate(model, val_b, mu, sd, frame)
+             ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/babunambothiri/Documents/AI Project/train_lj.py", line 53, in evaluate
+    pE, pF = model(pos, z, batch)
+             ~~~~~^^^^^^^^^^^^^^^
+  File "/home/babunambothiri/Documents/AI Project/.venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/babunambothiri/Documents/AI Project/.venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/babunambothiri/Documents/AI Project/faenet.py", line 143, in forward
+    Ep, Fp = self.phi(p, z[atom], src, dst, pair, len(gb))
+             ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/babunambothiri/Documents/AI Project/faenet.py", line 120, in phi
+    f = filt(torch.cat([e, h[dst], h[src]], -1))
+             ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 228.00 MiB. GPU 0 has a total capacity of 5.67 GiB of which 51.81 MiB is free. Process 2020274 has 294.00 MiB memory in use. Including non-PyTorch memory, this process has 2.01 GiB memory in use. Process 2036583 has 3.29 GiB memory in use. Of the allocated memory 1.73 GiB is allocated by PyTorch, and 137.54 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)

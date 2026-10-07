@@ -1,0 +1,33 @@
+device: cuda
+baseline (predict mean) energy MAE: 4.734
+epoch   5  loss 3.542  val E MAE 5.126  F MAE 1.680  (59.6s/epoch)
+epoch  10  loss 4.539  val E MAE 8.964  F MAE 1.715  (59.4s/epoch)
+epoch  15  loss 2.729  val E MAE 0.843  F MAE 1.522  (58.3s/epoch)
+epoch  20  loss 2.012  val E MAE 3.207  F MAE 1.061  (58.2s/epoch)
+epoch  25  loss 2.620  val E MAE 5.514  F MAE 1.651  (58.1s/epoch)
+epoch  30  loss 1.942  val E MAE 2.707  F MAE 1.113  (151.9s/epoch)
+epoch  35  loss 1.684  val E MAE 0.515  F MAE 0.818  (58.3s/epoch)
+epoch  40  loss 1.701  val E MAE 1.948  F MAE 0.922  (58.2s/epoch)
+epoch  45  loss 1.335  val E MAE 0.402  F MAE 0.718  (58.3s/epoch)
+epoch  50  loss 1.388  val E MAE 1.772  F MAE 0.644  (58.3s/epoch)
+epoch  55  loss 1.298  val E MAE 1.012  F MAE 0.656  (58.3s/epoch)
+epoch  60  loss 1.101  val E MAE 0.514  F MAE 0.578  (58.2s/epoch)
+epoch  65  loss 1.273  val E MAE 2.590  F MAE 0.628  (58.3s/epoch)
+epoch  70  loss 0.935  val E MAE 0.391  F MAE 0.519  (58.3s/epoch)
+epoch  75  loss 0.864  val E MAE 0.759  F MAE 0.472  (58.3s/epoch)
+nice terminated by signal TERM.
+resumed from runs/aspirin_canon_grad_50k_ep75.pt at epoch 75 (val F MAE 0.472)
+resumed from runs/aspirin_canon_grad_50k_resume.pt at epoch 75 (val F MAE 0.472)
+device: cuda
+baseline (predict mean) energy MAE: 4.734
+epoch  80  loss 0.726  val E MAE 0.228  F MAE 0.474  (58.2s/epoch)
+epoch  85  loss 0.831  val E MAE 0.887  F MAE 0.445  (84.6s/epoch)
+epoch  90  loss 0.842  val E MAE 0.228  F MAE 0.430  (58.6s/epoch)
+epoch  95  loss 0.726  val E MAE 0.224  F MAE 0.423  (92.2s/epoch)
+epoch 100  loss 0.610  val E MAE 0.197  F MAE 0.419  (58.6s/epoch)
+
+same weights, different inference frames (E MAE, F MAE, |dE| under random E(3) move):
+  none   4.350  2.712  1.4e+01
+  sfa    3.483  1.390  9.7e+00
+  canon  0.197  0.419  2.5e-04
+  full   3.384  1.144  2.0e-04
